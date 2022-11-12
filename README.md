@@ -1,0 +1,1 @@
+# Sample JWT Auth token
