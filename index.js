@@ -16,7 +16,7 @@ const whitelist = WHITE_LISTING_URLs.split(',')
 const corsOptions = {
   origin: (origin, cb) => {
     console.log({ origin })
-    if (whitelist.indexOf(origin) !== 1) {
+    if (whitelist.includes(origin)) {
       cb(null, true)
     } else {
       cb(new Error('Not allowed by CORS'))
