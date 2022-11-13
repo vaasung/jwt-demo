@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = require('./routes/authRouter')
 
-const { PORT, PGURL } = process.env
+const { PORT } = process.env
 const app = express()
 
 app.use(express.static('public'))
@@ -11,4 +11,4 @@ app.set('view engine', 'ejs')
 
 app.use(router)
 app.get('/', (req, res) => res.render('pages/home'))
-app.listen(PORT ?? 4000)
+app.listen(PORT || 4000, console.log(`App started running ${PORT}`))
