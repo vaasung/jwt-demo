@@ -11,12 +11,16 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use([express.json(), express.urlencoded({ extended: true })])
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+app.use(function (req, res, next) {
+  req.headers.origin = req.headers.origin || req.headers.host
+  next()
+})
 
 const whitelist = WHITE_LISTING_URLs.split(',')
 const corsOptions = {
   origin: (origin, cb) => {
-    console.log({ origin })
-    if (whitelist.includes(origin)) {
+    console.log({ origin, whitelist })
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
       cb(null, true)
     } else {
       cb(new Error('Not allowed by CORS'))
