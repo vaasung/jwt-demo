@@ -2,7 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 
-const router = require('./routes/authRouter')
+const authRouter = require('./routes/authRouter')
+const movieRouter = require('./routes/movieRouter')
 
 const { PORT, WHITE_LISTING_URLs } = process.env
 const app = express()
@@ -16,20 +17,21 @@ app.use(function (req, res, next) {
   next()
 })
 
-const whitelist = WHITE_LISTING_URLs.split(',')
-const corsOptions = {
-  origin: (origin, cb) => {
-    console.log({ origin, whitelist })
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      cb(null, true)
-    } else {
-      cb(new Error('Not allowed by CORS'))
-    }
-  }
-}
+// const whitelist = WHITE_LISTING_URLs.split(',')
+// const corsOptions = {
+//   origin: (origin, cb) => {
+//     console.log({ origin, whitelist })
+//     if (whitelist.indexOf(origin) !== -1 || !origin) {
+//       cb(null, true)
+//     } else {
+//       cb(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 // app.use(cors(corsOptions))
 app.use(cors())
 
-app.use(router)
+app.use('/auth', authRouter)
+app.use('/movie', movieRouter)
 app.get('/', (req, res) => res.render('pages/home'))
 app.listen(PORT || 4000, console.log(`App started running ${PORT}`))

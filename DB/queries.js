@@ -2,6 +2,10 @@ const { pool } = require('./db')
 
 const COL_NAME = (table) => `SELECT column_name FROM information_schema.columns WHERE table_name = '${table}';`
 
+const SELECT_TABLE = (tableName, whereClause) => {
+  return `SELECT * FROM ${tableName} ${whereClause ? `WHERE ${whereClause}` : ''} ${!whereClause ? 'LIMIT 30' : ''}`
+}
+
 const INSERT_USER = async (values) => {
   const val = values.map((d, i) => `$${(i = i + 1)}`)
   const columnNameQ = COL_NAME('users')
@@ -11,5 +15,6 @@ const INSERT_USER = async (values) => {
 }
 
 module.exports = {
-  INSERT_USER
+  INSERT_USER,
+  SELECT_TABLE
 }
