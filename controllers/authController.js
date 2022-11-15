@@ -25,7 +25,6 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body
   try {
-    // const queryUser = `SELECT * FROM users WHERE email='${email}'`
     const queryUser = SELECT_TABLE('users', `email='${email}'`)
     const { rowCount, rows } = await pool.query(queryUser)
 
