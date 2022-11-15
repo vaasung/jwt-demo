@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 const authRouter = require('./routes/authRouter')
 const movieRouter = require('./routes/movieRouter')
@@ -10,12 +11,14 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use([express.json(), express.urlencoded({ extended: true })])
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
+app.use(cookieParser())
 app.use(function (req, res, next) {
   req.headers.origin = req.headers.origin || req.headers.host
   next()
 })
+
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 // const whitelist = WHITE_LISTING_URLs.split(',')
 // const corsOptions = {
