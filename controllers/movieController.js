@@ -1,11 +1,10 @@
 const { pool } = require('../DB/db')
-const { SELECT_TABLE } = require('../DB/queries')
+const { SELECT_TABLE, INSERT_TABLE, COL_NAME, UPDATE_TABLE, DELETE_BY } = require('../DB/queries')
 
 const getMovie = async (req, res) => {
   try {
     const { id } = req.query ?? {}
     const getMovieListQuery = id !== undefined ? SELECT_TABLE('movies', `id=${parseInt(id)}`) : SELECT_TABLE('movies')
-    // const getMovieListQuery = id !== undefined ? ÷ : SELECT_TABLE('movies')
     const movieList = (await pool.query(getMovieListQuery)).rows
     if (movieList.length <= 0) {
       return res.send({ message: 'no movies found' })
@@ -17,15 +16,29 @@ const getMovie = async (req, res) => {
 }
 
 const addMovie = async (req, res) => {
-  const { movie_name, movie_rating, movie_cast, movie_genre, movie_release_date } = req.body
   try {
-    const addMovieQuery =
-      'INSERT INTO movies (movie_name, movie_rating, movie_cast, movie_genre, movie_release_date) VALUES ($1, $2, $3, $4, $5)'
-    const mc = `{${movie_cast.map((d) => `"${d}"`)}}`
-    const reqValues = { movie_name, movie_rating, movie_cast: mc, movie_genre, movie_release_date }
-    const values = Object.values(reqValues)
-
-    await pool.query(addMovieQuery, values)
+    const columnNameQ = COL_NAME('movies')
+    const columnNames = (await pool.query(columnNameQ)).rows.map(({ column_name }) => column_name).slice(1)
+    const cn = columnNames.map((cn) => {
+      if (req.body[cn] === 'movie_cast') {
+        return {
+          key: cn,
+          val: `{${req.body[cn].map((d) => `"${d}"`)}}`
+        }
+      }
+      return {
+        key: cn,
+        val: req.body[cn]
+      }
+    })
+    const query = await INSERT_TABLE(
+      'movies',
+      cn.map(({ key }) => key)
+    )
+    await pool.query(
+      query,
+      cn.map(({ val }) => val)
+    )
     res.send({ message: 'Movie added successfully' })
   } catch (error) {
     res.send({ message: 'Error while adding movie', error })
@@ -34,15 +47,9 @@ const addMovie = async (req, res) => {
 
 const updateMovie = async (req, res) => {
   const { id } = req.query ?? {}
-  const { movie_name, movie_rating, movie_cast, movie_genre, movie_release_date } = req.body
-  const updateMovieQuery = `UPDATE movies SET movie_name=$1, movie_rating=$2, movie_cast=$3 WHERE id=${parseInt(id)}`
   try {
-    console.log(movie_name)
-    await pool.query(updateMovieQuery, [movie_name, movie_rating, movie_cast])
-    // pool
-    //   .query(updateMovieQuery, [movie_name, movie_rating, movie_cast])
-    //   .then()
-    //   .catch((e) => console.log({ e }))
+    const updateMovieQuery = await UPDATE_TABLE('movies', req.body, `id=${parseInt(id)}`)
+    await pool.query(updateMovieQuery, Object.values(req.body))
     res.send({ message: 'Movie updated successfully' })
   } catch (error) {
     res.send({ message: 'Error while updating movie', error })
@@ -50,8 +57,7 @@ const updateMovie = async (req, res) => {
 }
 const deleteMovie = async (req, res) => {
   const { id } = req.query ?? {}
-  const deleteMovieQuery = `DELETE FROM movies WHERE id=${parseInt(id)}`
-
+  const deleteMovieQuery = DELETE_BY('movies', `id=${parseInt(id)}`)
   try {
     await pool.query(deleteMovieQuery)
     res.send({ message: 'Movie deleted successfully' })
