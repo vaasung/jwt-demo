@@ -1,6 +1,8 @@
 const { hashSync, compareSync } = require('bcryptjs')
 const { pool } = require('../DB/db')
 const { INSERT_USER, SELECT_TABLE } = require('../DB/queries')
+const { generateToken } = require('./../middlewares/token')
+const { MAX_AGE } = require('./../utils/constants')
 
 const register = async (req, res) => {
   res.render('pages/register')
@@ -44,12 +46,21 @@ const loginUser = async (req, res) => {
       })
     }
 
-    return res.status(200).json({
+    const token = generateToken(rows[0].email)
+    // EJS cookies
+    console.log({ token })
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: MAX_AGE
+    })
+    res.status(200).json({
       status: 200,
-      message: 'user logged-in successfully'
+      message: 'user logged-in successfully',
+      token
     })
   } catch (error) {
-    res.send({ error: error?.detail ?? error })
+    return res.send({ error: error?.detail ?? error })
   }
 }
 
