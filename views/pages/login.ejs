@@ -54,11 +54,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 })
-                const { status, message } = await loginResp.json()
+                const { status, message, data } = await loginResp.json()
                 if (status === 404 || status === 401) {
                     toggleToast({ show: true, message })
                 } else {
-                    toggleToast({ show: true, message })
+                    toggleToast({ show: true, message: `${message}, redirecting to home page...` })
                     setTimeout(() => {
                         window.location.href = '/'
                     }, 2000);

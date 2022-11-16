@@ -50,6 +50,7 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       maxAge: MAX_AGE
     })
+    global.username = rows[0].username
     res.status(200).json({
       status: 200,
       message: 'User logged in successfully',
