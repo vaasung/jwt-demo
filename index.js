@@ -20,30 +20,33 @@ app.use(function (req, res, next) {
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-// const whitelist = WHITE_LISTING_URLs.split(',')
-// const corsOptions = {
-//   origin: (origin, cb) => {
-//     console.log({ origin, whitelist })
-//     if (whitelist.indexOf(origin) !== -1 || !origin) {
-//       cb(null, true)
-//     } else {
-//       cb(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-// app.use(cors(corsOptions))
-app.use(cors())
+const whitelist = WHITE_LISTING_URLs.split(',')
+const corsOptions = {
+  origin: (origin, cb) => {
+    console.log({ origin, whitelist })
+    if (whitelist.some(w => w.includes(origin)) || !origin) {
+      cb(null, true)
+    } else {
+      cb(new Error('Not allowed by CORS'))
+    }
+  }
+}
+app.use(cors(corsOptions))
 
 app.use('/auth', authRouter)
 app.use('/movie', movieRouter)
 
-app.get('/', (req, res) => res.render('pages/home', { token: req.cookies?.token }))
-app.get('/add', (req, res) => res.render('pages/add'))
-app.get('/edit', (req, res) => res.render('pages/edit'))
-app.get('/view', (req, res) => res.render('pages/view'))
-app.get('/register', (req, res) => res.render('pages/register', { token: req.cookies?.token }))
-app.get('/login', (req, res) => res.render('pages/login', { token: req.cookies?.token }))
-app.get('/unAuth', (req, res) => res.render('pages/unAuth'))
-app.get('/*', (req, res) => res.render('pages/404'))
+app.get('/', (req, res) =>
+  res.render('pages/home', { token: req.cookies?.token, title: 'JWT Demo', username: global.username })
+)
+app.get('/add', (req, res) => res.render('pages/add', { title: 'JWT Demo - Add Movie' }))
+app.get('/edit', (req, res) => res.render('pages/edit', { title: 'JWT Demo - Edit Movie' }))
+app.get('/view', (req, res) => res.render('pages/view', { title: 'JWT Demo - View Movie' }))
+app.get('/register', (req, res) =>
+  res.render('pages/register', { token: req.cookies?.token, title: 'JWT Demo - Register' })
+)
+app.get('/login', (req, res) => res.render('pages/login', { token: req.cookies?.token, title: 'JWT Demo - Login' }))
+app.get('/unAuth', (req, res) => res.render('pages/unAuth', { title: 'JWT Demo - Un authorized' }))
+app.get('/*', (req, res) => res.render('pages/404', { title: 'JWT Demo = Page Not Found' }))
 
 app.listen(PORT || 4000, console.log(`App started running ${PORT}`))
