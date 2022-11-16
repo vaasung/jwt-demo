@@ -20,8 +20,9 @@ const verifyToken = (req, res, next) => {
       next()
     })
   } else {
-    return res.send({
-      message: 'token expired'
+    return res.status(401).send({
+      status: 401,
+      message: 'Invalid token'
     })
   }
 }

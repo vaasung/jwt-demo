@@ -2,8 +2,8 @@ const { pool } = require('./db')
 
 const COL_NAME = (table) => `SELECT column_name FROM information_schema.columns WHERE table_name = '${table}';`
 
-const SELECT_TABLE = (tableName, whereClause) => {
-  return `SELECT * FROM ${tableName} ${whereClause ? `WHERE ${whereClause}` : ''} ${!whereClause ? 'LIMIT 30' : ''}`
+const SELECT_TABLE = (tableName, whereClause, sort) => {
+  return `SELECT * FROM ${tableName} ${sort ? `ORDER BY id DESC` : ''} ${whereClause ? `WHERE ${whereClause}` : ''} ${!whereClause ? 'LIMIT 30' : ''}`
 }
 
 const INSERT_USER = async (values) => {

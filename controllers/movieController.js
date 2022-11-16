@@ -4,12 +4,13 @@ const { SELECT_TABLE, INSERT_TABLE, COL_NAME, UPDATE_TABLE, DELETE_BY } = requir
 const getMovie = async (req, res) => {
   try {
     const { id } = req.query ?? {}
-    const getMovieListQuery = id !== undefined ? SELECT_TABLE('movies', `id=${parseInt(id)}`) : SELECT_TABLE('movies')
+    const getMovieListQuery =
+      id !== undefined ? SELECT_TABLE('movies', `id=${parseInt(id)}`, false) : SELECT_TABLE('movies', '', true)
     const movieList = (await pool.query(getMovieListQuery)).rows
     if (movieList.length <= 0) {
-      return res.send({ message: 'no movies found' })
+      return res.status(404).send({ status: 404, message: 'No movies found' })
     }
-    res.send({ message: 'success', data: movieList })
+    res.status(200).send({ status: 200, message: 'success', data: movieList })
   } catch (error) {
     res.send({ message: 'error', error })
   }
@@ -48,12 +49,12 @@ const addMovie = async (req, res) => {
 const updateMovie = async (req, res) => {
   const { id } = req.query ?? {}
   if (req.body.id) {
-    return res.send({ message: 'ID not editable' })
+    return res.status(304).send({ message: 'ID not editable' })
   }
   try {
     const updateMovieQuery = await UPDATE_TABLE('movies', req.body, `id=${parseInt(id)}`)
     await pool.query(updateMovieQuery, Object.values(req.body))
-    res.send({ message: 'Movie updated successfully' })
+    res.send({ status: 200, message: 'Movie updated successfully' })
   } catch (error) {
     res.send({ message: 'Error while updating movie', error })
   }
@@ -63,7 +64,7 @@ const deleteMovie = async (req, res) => {
   const deleteMovieQuery = DELETE_BY('movies', `id=${parseInt(id)}`)
   try {
     await pool.query(deleteMovieQuery)
-    res.send({ message: 'Movie deleted successfully' })
+    res.status(202).send({ status: 202, message: 'Movie deleted successfully' })
   } catch (error) {
     res.send({ message: 'Error while deleting movie', error })
   }
