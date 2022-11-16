@@ -20,19 +20,18 @@ app.use(function (req, res, next) {
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-// const whitelist = WHITE_LISTING_URLs.split(',')
-// const corsOptions = {
-//   origin: (origin, cb) => {
-//     console.log({ origin, whitelist })
-//     if (whitelist.indexOf(origin) !== -1 || !origin) {
-//       cb(null, true)
-//     } else {
-//       cb(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-// app.use(cors(corsOptions))
-app.use(cors())
+const whitelist = WHITE_LISTING_URLs.split(',')
+const corsOptions = {
+  origin: (origin, cb) => {
+    console.log({ origin, whitelist })
+    if (whitelist.some(w => w.includes(origin)) || !origin) {
+      cb(null, true)
+    } else {
+      cb(new Error('Not allowed by CORS'))
+    }
+  }
+}
+app.use(cors(corsOptions))
 
 app.use('/auth', authRouter)
 app.use('/movie', movieRouter)
