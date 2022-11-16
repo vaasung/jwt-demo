@@ -1435,7 +1435,7 @@ main {
 }
 .movie_card .info_section .movie_social ul li.delete {
   color: tomato;
-  opacity: .6;
+  opacity: 0.6;
 }
 .movie_card .info_section .movie_social ul li:hover {
   transition: color 0.3s;
@@ -1506,6 +1506,18 @@ main {
 #bright:hover {
   box-shadow: 0px 0px 120px -55px rgba(255, 51, 0, 0.5);
 }
-.username{
+.username {
   text-transform: capitalize;
+}
+.logout {
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.logout >a {
+  font-size: 16px;
+  font-family: var(--font-default);
+  text-transform: capitalize !important;
+}
+.logout:hover {
+  color: tomato;
 }
