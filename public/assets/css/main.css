@@ -1195,6 +1195,11 @@ main {
 .contact .php-email-form button[type='submit']:hover {
   background: rgba(39, 167, 118, 0.8);
 }
+.contact .php-email-form button[type='submit']:disabled {
+  background: #3a3a3a;
+  color: #4f4f4f;
+  cursor: default;
+}
 
 @-webkit-keyframes animate-loading {
   0% {
@@ -1427,6 +1432,10 @@ main {
   transition: color 0.3s;
   transition-delay: 0.15s;
   margin: 0 10px;
+}
+.movie_card .info_section .movie_social ul li.delete {
+  color: tomato;
+  opacity: .6;
 }
 .movie_card .info_section .movie_social ul li:hover {
   transition: color 0.3s;

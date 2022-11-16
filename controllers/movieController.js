@@ -40,7 +40,7 @@ const addMovie = async (req, res) => {
       query,
       cn.map(({ val }) => val)
     )
-    res.send({ message: 'Movie added successfully' })
+    res.status(200).send({ status: 200, message: 'Movie added successfully' })
   } catch (error) {
     res.send({ message: 'Error while adding movie', error })
   }

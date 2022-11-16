@@ -5,6 +5,7 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
                         <h2>Register</h2>
+                        <p>You can use any dummy email, We are using bcrypt hashing algo for the password</p>
                     </div>
                 </div>
             </div>
@@ -41,9 +42,15 @@
         </div>
     </section>
     <script>
+        const token = '<%- JSON.stringify(token) %>'
+        if (token) {
+            window.location.href = '/'
+        }
         const form = document.querySelector('form')
         form.addEventListener('submit', async (evt) => {
             evt.preventDefault()
+            form.querySelector('button[type="submit"]').disabled = true
+            form.style.opacity = .5
             const { username: { value: username }, email: { value: email }, password: { value: password } } = form
             try {
                 const registerResp = await fetch('auth/register', {
@@ -51,6 +58,17 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 })
+                const { status, message } = await registerResp.json()
+                console.log(status)
+                if (status === 409) {
+                    toggleToast({ show: true, message })
+                } else {
+                    toggleToast({ show: true, message })
+                    setTimeout(() => {
+                        window.location.href = '/login'
+                    }, 2000);
+                }
+
             } catch (error) {
                 console.log({ error })
             }

@@ -24,6 +24,12 @@
                 if (status === 404) {
                     movieList.innerHTML = message
                 }
+                if (status === 401) {
+                    toggleToast({ show: true, message })
+                    setTimeout(() => {
+                        window.location.href = '/'
+                    }, 6000);
+                }
                 data?.map(d => {
                     const element = document.createElement('div')
                     element.innerHTML = `

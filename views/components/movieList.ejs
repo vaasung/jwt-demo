@@ -7,8 +7,16 @@
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         })
-        const deleteMoviData = await deleteMovieResp.json()
-        console.log(deleteMoviData)
+        const { status, message } = await deleteMovieResp.json()
+        if (status === 304) {
+            toggleToast({ show: true, message: `${message} <a href='/add' class='btn-get-started'> Add new movie</a>` })
+        } else {
+            toggleToast({ show: true, message })
+            setTimeout(() => {
+                toggleToast({ show: false })
+                window.location.href = '/'
+            }, 1000);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', async (e) => {
@@ -21,9 +29,7 @@
             console.log({ status })
             if (status === 401) {
                 toggleToast({ show: true, message: `${message}, <a href='/login'>Login</a>` })
-
             } else {
-
                 toggleToast({ show: false })
             }
             getAllMovieData?.data?.map((d) => {
@@ -42,7 +48,7 @@
                         <ul>
                             <li><a href='/view?id=${d.id}'><i class='material-icons'>View</i></a></li>
                             <li><a href='/edit?id=${d.id}'><i class='material-icons'>Edit</i></a></li>
-                            <li onclick='onDeleteMovie(${d.id})'><i class='material-icons'>Delete</i></li>
+                            <li class='delete' onclick='onDeleteMovie(${d.id})'><i class='material-icons'>Delete</i></li>
                         </ul>
                     </div>
                     </div>

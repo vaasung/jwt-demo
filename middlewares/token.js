@@ -22,7 +22,7 @@ const verifyToken = (req, res, next) => {
   } else {
     return res.status(401).send({
       status: 401,
-      message: 'Invalid token'
+      message: 'Your are not authorized to access this page'
     })
   }
 }

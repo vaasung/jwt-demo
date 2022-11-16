@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
       message: 'user added successfully'
     })
   } catch (error) {
-    res.status(409).send({ error: error?.detail })
+    res.status(409).send({ status: 409, message: error?.detail })
   }
 }
 
@@ -52,15 +52,20 @@ const loginUser = async (req, res) => {
     })
     res.status(200).json({
       status: 200,
-      message: 'user logged-in successfully',
+      message: 'User logged in successfully',
       token
     })
   } catch (error) {
     return res.send({ error: error?.detail ?? error })
   }
 }
+const logoutUser = async (req, res) => {
+  res.cookie('token', '', { maxAge: 1 })
+  res.status(200).send({ status: 200, message: 'User logged out' })
+}
 
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  logoutUser
 }
