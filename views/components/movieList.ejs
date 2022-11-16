@@ -1,0 +1,60 @@
+<main id='main_movie_card' class='main_movie_card'>
+</main>
+
+<script>
+    const onDeleteMovie = async (id) => {
+        const deleteMovieResp = await fetch(`movie/deleteMovie?id=${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        const deleteMoviData = await deleteMovieResp.json()
+        console.log(deleteMoviData)
+    }
+
+    document.addEventListener('DOMContentLoaded', async (e) => {
+        toggleToast({ show: true })
+        try {
+            const main = document.querySelector('#main_movie_card')
+            const getAllMovieResp = await fetch('movie/getMovie')
+            const getAllMovieData = await getAllMovieResp.json()
+            const { status, message } = getAllMovieData
+            console.log({ status })
+            if (status === 401) {
+                toggleToast({ show: true, message: `${message}, <a href='/login'>Login</a>` })
+
+            } else {
+
+                toggleToast({ show: false })
+            }
+            getAllMovieData?.data?.map((d) => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie_card'
+                movieCard.innerHTML = `
+                <div class='info_section'>
+                    <div class='movie_header'>
+                        <h1>${d.movie_name}</h1>
+                        <h4>${dateFormated(d.movie_release_date)}, ${d.movie_genre}</h4>
+                        <span class='minutes'>${d.movie_rating} <span>&#9733</span></span>
+                        <p class='type'>${d.movie_cast.join().replaceAll(',', ',  ')}</p>
+                    </div>
+
+                    <div class='movie_social'>
+                        <ul>
+                            <li><a href='/view?id=${d.id}'><i class='material-icons'>View</i></a></li>
+                            <li><a href='/edit?id=${d.id}'><i class='material-icons'>Edit</i></a></li>
+                            <li onclick='onDeleteMovie(${d.id})'><i class='material-icons'>Delete</i></li>
+                        </ul>
+                    </div>
+                    </div>
+                    <div class='blur_back bright_back'></div>
+                `
+
+                main.append(movieCard)
+            })
+
+        } catch (error) {
+
+        }
+    })
+
+</script>

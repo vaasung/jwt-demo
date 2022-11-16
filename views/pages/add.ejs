@@ -1,0 +1,81 @@
+<%- include('../components/header'); -%>
+    <section id="contact" class="contact">
+        <div class="page-header d-flex align-items-center">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <h2>Add Movie</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-6">
+                    <form action="" method="post" role="form" class="php-email-form">
+                        <div class="row">
+                            <div class="form-group mt-3">
+                                <input type="text" class="form-control" name="movie_name" id="movie_name"
+                                    placeholder="Movie name" required="" />
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="text" class="form-control" name="movie_rating" id="movie_rating"
+                                placeholder="Movie rating (in number)" required="" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="text" class="form-control" name="movie_cast" id="movie_cast"
+                                placeholder="Movie cast (seperate by comma)" required="" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="text" class="form-control" name="movie_genre" id="movie_genre"
+                                placeholder="Movie genre" required="" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="text" class="form-control" name="movie_release_date" id="movie_release_date"
+                                placeholder="Movie release date" required="" />
+                        </div>
+                        <div class="my-3">
+                            <div class="loading">Loading</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Your message has been sent. Thank you!</div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        const form = document.querySelector('form')
+        form.addEventListener('submit', async (evt) => {
+            evt.preventDefault()
+            console.log(evt)
+            const {
+                movie_name: { value: movie_name },
+                movie_rating: { value: movie_rating },
+                movie_cast: { value: movie_cast },
+                movie_genre: { value: movie_genre },
+                movie_release_date: { value: movie_release_date }
+            }
+                = form
+            try {
+                const loginrResp = await fetch('movie/addMovie', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        movie_name,
+                        movie_rating,
+                        movie_cast: [movie_cast],
+                        movie_genre,
+                        movie_release_date
+                    })
+                })
+            } catch (error) {
+                console.log({ error })
+            }
+        })
+    </script>
+    <%- include('../components/footer'); -%>

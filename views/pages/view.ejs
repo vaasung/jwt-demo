@@ -1,0 +1,64 @@
+<%- include('../components/header'); -%>
+    <main id="main" data-aos="fade" data-aos-delay="1500" class="aos-init aos-animate">
+        <div class="page-header d-flex align-items-center">
+            <div class="container position-relative">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-9 text-center content" id="movieList">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            toggleToast({ show: true })
+            const qParams = new URLSearchParams(location.search)
+            const id = qParams.get('id')
+            const movieList = document.querySelector('#movieList')
+
+            try {
+                const getMovieByIdResp = await fetch(`movie/getMovie?id=${id}`)
+                const { data, status, message } = await getMovieByIdResp.json()
+                toggleToast({ show: false })
+                if (status === 404) {
+                    movieList.innerHTML = message
+                }
+                data?.map(d => {
+                    const element = document.createElement('div')
+                    element.innerHTML = `
+                    <a href="/" class="navigation-link">Go to home</a>
+                    <h2>${d.movie_name}</h2>
+                    <p>
+                        <h5>Cast:</h5>
+                        ${d.movie_cast.join().replaceAll(',', ', ')}
+                    </p>
+                    <ul>
+                        <li>
+                            <i class="bi bi-chevron-right"></i>
+                            <strong>Name:</strong> <span>${d.movie_name}</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-chevron-right"></i>
+                            <strong>Genre:</strong> <span>${d.movie_genre}</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-chevron-right"></i>
+                            <strong>Rating:</strong> <span>${d.movie_rating}</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-chevron-right"></i>
+                            <strong>Released:</strong> <span>${d.movie_release_date}</span>
+                        </li>
+                    </ul>
+                    `
+                    movieList.append(element)
+                })
+
+            } catch (error) {
+                console.log({ error })
+            }
+
+        })
+    </script>
+    <%- include('../components/footer'); -%>

@@ -5,6 +5,12 @@ const { verifyToken } = require('./../middlewares/token')
 
 const movieRouter = Router()
 
+// movieRouter.get('/getMovie',  getMovie)
+// movieRouter.post('/addMovie',  addMovie)
+// movieRouter.post('/seeds',  seedsMovie)
+// movieRouter.patch('/updateMovie',  secureData, updateMovie)
+// movieRouter.delete('/deleteMovie',  secureData, deleteMovie)
+
 movieRouter.get('/getMovie', verifyToken, getMovie)
 movieRouter.post('/addMovie', verifyToken, addMovie)
 movieRouter.post('/seeds', verifyToken, seedsMovie)
