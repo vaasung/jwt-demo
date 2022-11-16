@@ -5,6 +5,7 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
                         <h2>Login</h2>
+                        <p>You can use any dummy email, We are using bcrypt hashing algo for the password</p>
                     </div>
                 </div>
             </div>
@@ -38,8 +39,14 @@
     </section>
     <script>
         const form = document.querySelector('form')
+        const token = '<%- JSON.stringify(token) %>'
+        if (token) {
+            window.location.href = '/'
+        }
         form.addEventListener('submit', async (evt) => {
             evt.preventDefault()
+            form.querySelector('button[type="submit"]').disabled = true
+            form.style.opacity = .5
             const { email: { value: email }, password: { value: password } } = form
             try {
                 const loginResp = await fetch('auth/login', {
@@ -48,8 +55,13 @@
                     body: JSON.stringify({ email, password })
                 })
                 const { status, message } = await loginResp.json()
-                if(status === 404 || status === 401){
+                if (status === 404 || status === 401) {
                     toggleToast({ show: true, message })
+                } else {
+                    toggleToast({ show: true, message })
+                    setTimeout(() => {
+                        window.location.href = '/'
+                    }, 2000);
                 }
 
             } catch (error) {

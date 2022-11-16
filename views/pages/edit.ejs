@@ -65,6 +65,8 @@
                     setTimeout(() => {
                         toggleToast({ show: false })
                     }, 2000);
+                } else if (status === 401) {
+                    window.location.href = '/unAuth'
                 } else {
                     toggleToast({ show: false })
                 }
@@ -103,15 +105,15 @@
                 })
                 const { status, message } = await loginrResp.json()
                 if (status === 304) {
-                    toggleToast({ show: true, message })
+                    toggleToast({ show: true, message: `${message} <a href='/add' class='btn-get-started'> Add new movie</a>` })
                     setTimeout(() => {
-                        toggleToast({ show: false }) 
+                        toggleToast({ show: false })
                     }, 6000);
                 } else {
                     toggleToast({ show: true, message })
                     setTimeout(() => {
                         window.location.href = '/'
-                    }, 2000);
+                    }, 6000);
                 }
             } catch (error) {
                 console.log({ error })
