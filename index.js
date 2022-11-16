@@ -9,7 +9,8 @@ const movieRouter = require('./routes/movieRouter')
 const { PORT, WHITE_LISTING_URLs } = process.env
 const app = express()
 
-app.use('/public', express.static('public'))
+// app.use('/public', express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use([express.json(), express.urlencoded({ extended: true })])
 app.use(cookieParser())
 app.use(function (req, res, next) {
