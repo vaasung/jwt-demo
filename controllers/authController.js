@@ -61,9 +61,10 @@ const loginUser = async (req, res) => {
   }
 }
 const logoutUser = async (req, res) => {
-  // res.cookie('token', '', { maxAge: 1 })
+  res.cookie('token', '', { maxAge: 1 })
   res.clearCookie('token')
   res.status(200).send({ status: 200, message: 'User logged out' })
+  // res.redirect('/')
 }
 
 module.exports = {
