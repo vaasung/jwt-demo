@@ -42,6 +42,9 @@
       fetch('auth/logout').then(async (res) => {
         const { status, message } = await res.json()
         toggleToast({ show: true, message })
+        document.cookie.split(';').forEach(function (c) {
+          document.cookie = c.trim().split('=')[0] + '=;' + 'expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+        });
         setTimeout(() => {
           location.href = '/'
         }, 1000);
@@ -54,18 +57,19 @@
   <h1 id="movieToast" class="movie-toast">
   </h1>
   <% var token=token; %>
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid d-flex align-items-center justify-content-between">
-      <a href="/" class="logo d-flex align-items-center me-auto me-lg-0"> <i class="bi bi-camera"></i>
-        <h1>JWT DemO</h1>
-      </a>
-      <% if(token) { %>
-        <nav id="navbar" class="navbar">
-          <ul>
-            <li class="btn-get-started username">Welcome <%- username -%></li>
-            <li class="btn-get-started logout"><a onclick="onLogout()">Logout</a></li>
-          </ul>
-        </nav>
-        <% } %>
+    <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <a href="/" class="logo d-flex align-items-center me-auto me-lg-0"> <i class="bi bi-camera"></i>
+          <h1>JWT DemO</h1>
+        </a>
+        <% if(token) { %>
+          <nav id="navbar" class="navbar">
+            <ul>
+              <li class="btn-get-started username">Welcome <%- username -%>
+              </li>
+              <li class="btn-get-started logout"><a onclick="onLogout()">Logout</a></li>
+            </ul>
+          </nav>
+          <% } %>
 
-  </header>
+    </header>

@@ -62,6 +62,8 @@
                 console.log(status)
                 if (status === 409) {
                     toggleToast({ show: true, message })
+                    form.querySelector('button[type="submit"]').disabled = false
+                    form.style.opacity = 1
                 } else {
                     toggleToast({ show: true, message })
                     setTimeout(() => {
