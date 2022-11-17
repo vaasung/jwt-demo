@@ -38,17 +38,17 @@
       toast.style.display = show ? 'block' : 'none'
       toast.innerHTML = message
     }
-    const onLogout = () => {
-      fetch('auth/logout').then(async (res) => {
-        const { status, message } = await res.json()
-        toggleToast({ show: true, message })
-        document.cookie.split(';').forEach(function (c) {
-          document.cookie = c.trim().split('=')[0] + '=;' + 'expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-        });
-        setTimeout(() => {
-          location.href = '/'
-        }, 1000);
+    const onLogout = async () => {
+      const logoutResp = await fetch('auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
       })
+      const { message } = await logoutResp.json()
+      console.log({ message })
+      toggleToast({ show: true, message: `${message}, Waiting to redirecting to home...` })
+      setTimeout(() => {
+        location.href = '/'
+      }, 8000);
     }
   </script>
 </head>
