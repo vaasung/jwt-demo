@@ -1325,6 +1325,22 @@ main {
   text-align: center;
   font-size: 13px;
   padding: 5px;
+  animation-name: toaster-anim;
+  animation-duration: .5s; 
+  animation-timing-function: ease-out; 
+  animation-delay: 0s;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-fill-mode: none;
+  animation-play-state: running; 
+}
+@keyframes toaster-anim {
+  from {
+    background-color: #045a39;
+  }
+  to {
+    background-color: #10b375;
+  }
 }
 .navigation-link {
   text-align: right;
@@ -1513,7 +1529,7 @@ main {
   cursor: pointer;
   transition: all 0.5s;
 }
-.logout >a {
+.logout > a {
   font-size: 16px;
   font-family: var(--font-default);
   text-transform: capitalize !important;

@@ -45,7 +45,7 @@
       })
       const { message } = await logoutResp.json()
       console.log({ message })
-      toggleToast({ show: true, message: `${message}, Waiting to redirecting to home...` })
+      toggleToast({ show: true, message: `${message}, Redirecting to home...` })
       setTimeout(() => {
         location.href = '/'
       }, 8000);
