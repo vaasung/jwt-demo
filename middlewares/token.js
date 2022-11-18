@@ -9,6 +9,10 @@ const generateToken = (id) => {
 }
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token
+  // Testing without token only for localhost 3000
+  if(req.headers.referer.includes('3000')){
+    return next()
+  }
   if (token) {
     jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
       if (err) {
