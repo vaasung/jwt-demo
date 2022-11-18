@@ -23,8 +23,8 @@ app.set('view engine', 'ejs')
 const whitelist = WHITE_LISTING_URLs.split(',')
 const corsOptions = {
   origin: (origin, cb) => {
-    console.log({ origin, whitelist })
-    if (whitelist.some(w => w.includes(origin)) || !origin) {
+    console.log({ __origin: origin, __whitelist: whitelist })
+    if (whitelist.some((w) => w.includes(origin)) || !origin) {
       cb(null, true)
     } else {
       cb(new Error('Not allowed by CORS'))
