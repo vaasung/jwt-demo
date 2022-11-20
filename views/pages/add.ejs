@@ -32,8 +32,8 @@
                                 placeholder="Movie genre" required="" />
                         </div>
                         <div class="form-group mt-3">
-                            <input type="text" class="form-control" name="movie_release_date" id="movie_release_date"
-                                placeholder="Movie release date" required="" />
+                            <input type="date" format class="form-control" name="movie_release_date"
+                                id="movie_release_date" placeholder="Movie release date" required="" />
                         </div>
                         <div class="my-3">
                             <div class="loading">Loading</div>
@@ -81,7 +81,7 @@
                         movie_rating,
                         movie_cast: [movie_cast],
                         movie_genre,
-                        movie_release_date
+                        movie_release_date: dateFormated(movie_release_date)
                     })
                 })
                 const { message, status } = await loginrResp.json()
