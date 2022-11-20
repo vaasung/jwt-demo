@@ -10,24 +10,26 @@ const generateToken = (id) => {
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token
   // Testing without token only for localhost 3000
-  if(req.headers.referer.includes('3000')){
+  if (req.headers.referer?.includes('3000')) {
+    console.log({referer: req.headers.referer})
     return next()
-  }
-  if (token) {
-    jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
-      if (err) {
-        return res.send({
-          message: err
-        })
-      }
-      console.log({ decodedToken })
-      next()
-    })
   } else {
-    return res.status(401).send({
-      status: 401,
-      message: 'Your are not authorized to access this page'
-    })
+    if (token) {
+      jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
+        if (err) {
+          return res.send({
+            message: err
+          })
+        }
+        console.log({ decodedToken })
+        next()
+      })
+    } else {
+      return res.status(401).send({
+        status: 401,
+        message: 'Your are not authorized to access this page'
+      })
+    }
   }
 }
 
